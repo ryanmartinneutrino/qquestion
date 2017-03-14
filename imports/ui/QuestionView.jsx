@@ -14,6 +14,10 @@ class QuestionView extends Component {
   return {__html: this.props.question.text} 
  }
 
+ componentDidUpdate () {
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+  }
+
  render() {
    question = this.props.question;// ? this.props.questions : {text:'no question in db'} ;
    if(this.props.loading || !question){

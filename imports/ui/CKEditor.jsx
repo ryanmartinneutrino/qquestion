@@ -11,7 +11,9 @@ export default class CKEditor extends Component {
 
   render() {
     return (
-      <textarea name={this.elementName} defaultValue={this.props.value}></textarea>
+     <div className="bordertextarea">
+      <textarea rows="5" name={this.elementName} defaultValue={this.props.value} ></textarea>
+     </div>
     )
   }
 
@@ -19,7 +21,9 @@ export default class CKEditor extends Component {
     let configuration = {
       customConfig: '/ckeditor_config.js'
     };
-    CKEDITOR.replace(this.elementName, configuration);
+    CKEDITOR.disableAutoInline = true;
+    CKEDITOR.inline(this.elementName, configuration);
+    //CKEDITOR.replace(this.elementName, configuration);
     CKEDITOR.instances[this.elementName].on("change", function () {
       let data = CKEDITOR.instances[this.elementName].getData();
      // this.props.onChange(data);

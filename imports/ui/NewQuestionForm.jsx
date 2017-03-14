@@ -22,6 +22,7 @@ export default class NewQuestionForm extends Component {
     return (
       <div className='container'>
        <form  className='NewQuestion' onSubmit={this.handleSubmit.bind(this)} >
+        <h3> Type question: </h3>
         <CKEditor id={1} />
         <input type='submit' />
        </form>
