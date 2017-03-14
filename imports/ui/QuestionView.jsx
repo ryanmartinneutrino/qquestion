@@ -10,16 +10,23 @@ import { Questions } from '../api/questions.js';
 // App component - represents the whole app
 class QuestionView extends Component {
 
+ question_html() {
+  return {__html: this.props.question.text} 
+ }
+
  render() {
    question = this.props.question;// ? this.props.questions : {text:'no question in db'} ;
+   if(this.props.loading || !question){
+    return( <div className='container'>Loading...</div>);
+   }
+   else{
     return (
       <div className='container'>
-      Question Text:
-      <h2>
-      { this.props.loading ? "loading": question.text } 
-      </h2>
+      <div dangerouslySetInnerHTML={this.question_html()} />  
       </div>
     );
+
+   }
   }
 }
 
@@ -32,7 +39,6 @@ export default QuestionViewContainer =  createContainer(() => {
   const qhandle = Meteor.subscribe('questions');
   const loading = !qhandle.ready();   
   question = Questions.findOne({}, {sort: {createdAt: -1, limit: 1}});
-  console.log(loading? "still loading": "loaded question "+question._id+" with text "+question.text);
   return {
     question: question,
     loading: loading,
