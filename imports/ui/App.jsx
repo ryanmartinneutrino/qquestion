@@ -18,6 +18,7 @@ export default class App extends Component {
         </header>
       <NewQuestionForm />
       <br />
+      <h2> Last question from db </h2>
       <QuestionViewContainer />
       </div>
     );

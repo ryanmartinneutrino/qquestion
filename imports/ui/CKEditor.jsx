@@ -22,11 +22,11 @@ export default class CKEditor extends Component {
       customConfig: '/ckeditor_config.js'
     };
     CKEDITOR.disableAutoInline = true;
-    CKEDITOR.inline(this.elementName, configuration);
-    //CKEDITOR.replace(this.elementName, configuration);
+//    CKEDITOR.inline(this.elementName, configuration);
+    CKEDITOR.replace(this.elementName, configuration);
     CKEDITOR.instances[this.elementName].on("change", function () {
       let data = CKEDITOR.instances[this.elementName].getData();
-     // this.props.onChange(data);
+      this.props.onChange(data);
     }.bind(this));
   }
 }
