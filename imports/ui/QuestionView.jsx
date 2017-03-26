@@ -6,13 +6,11 @@ import { Meteor } from 'meteor/meteor';
  
 import { Questions } from '../api/questions.js';
 
+import HtmlView from './HtmlView.jsx';
+
  
 // App component - represents the whole app
 export class QuestionView extends Component {
-
- question_html() {
-  return {__html: this.props.question.text} 
- }
 
  componentDidUpdate () {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
@@ -21,12 +19,15 @@ export class QuestionView extends Component {
  render() {
    question = this.props.question;// ? this.props.questions : {text:'no question in db'} ;
    if(this.props.loading || !question){
-    return( <div className='container'>Loading...</div>);
+    return(  <HtmlView html="Loading..." />);
    }
    else{
     return (
-      <div className='container'>
-      <div dangerouslySetInnerHTML={this.question_html()} />  
+      <div className='panel panel-primary'>
+        <div className="panel-heading">Question</div>
+        <div className="panel-body">
+          <HtmlView html= {question.text } />
+        </div>
       </div>
     );
 
