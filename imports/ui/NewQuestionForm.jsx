@@ -30,17 +30,23 @@ export default class NewQuestionForm extends Component {
  }
 
  handleCKEditorChange(data){
-  this.setState({question: {text: data}} );
+  let question = this.state.question;
+  question.text=data;
+  this.setState({question: question} );
  }
 
  handleTypeChange(changeEvent){
+  let question = this.state.question;
   value = changeEvent.target.value;
-  this.setState({question: {type: value}} );
+  question.type=value;
+  this.setState({question: question});
  }
 
   handlePublicChange(changeEvent){
+  let question = this.state.question;
   value = changeEvent.target.checked;
-  this.setState({question: {isPublic: value}} );
+  question.isPublic=value;
+  this.setState({question: question} );
  }
 
 
@@ -49,11 +55,11 @@ export default class NewQuestionForm extends Component {
     return (
       <div className='container'>
        <form  className='NewQuestion' onSubmit={this.handleSubmit.bind(this)} >
-        <input type="radio" value="MC" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "MC"} /> Multiple Choice  
-        <input type="radio" value="MS" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "MS"} /> Multi Select  
-        <input type="radio" value="TF" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "TF"} /> True/Fals  
-        <input type="radio" value="SA" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "SA"} /> Short Answer <br/>
-        <input type="checkbox" onChange={this.handlePublicChange.bind(this)} checked={this.state.question.public}  value={true} /> Public <br/>
+        <input type="radio" name="type" value="MC" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "MC"} /> Multiple Choice  
+        <input type="radio" name="type" value="MS" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "MS"} /> Multi Select  
+        <input type="radio" name="type" value="TF" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "TF"} /> True/False  
+        <input type="radio" name="type" value="SA" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "SA"} /> Short Answer <br/>
+        <input type="checkbox" name="isPublic" onChange={this.handlePublicChange.bind(this)} checked={this.state.question.public}  value={true} /> Public <br/>
         <h3> Type question: </h3>
         <CKEditor id={1} inline={false} onChange={this.handleCKEditorChange.bind(this)} />
         <h3> Solution </h3>
