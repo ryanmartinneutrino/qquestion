@@ -17,16 +17,13 @@ export default class NewQuestionForm extends Component {
 
  handleSubmit(event){
   event.preventDefault();
-  const text = CKEDITOR.instances["editor_1"].getData();
-  const solution = CKEDITOR.instances["editor_2"].getData();
-  const type = ReactDOM.findDOMNode(this.refs.type).value  
-  console.log("The type is "+type);
   //Build question and insert into database
   Meteor.subscribe('questions');
-  Meteor.call('questions.insert', text);
-  console.log("inserted question with  text: "+ text);
+  Meteor.call('questions.insert', this.state.question.text);
+  console.log("inserted question with  text: "+ this.state.question.text);
   // Clear form
   CKEDITOR.instances["editor_1"].setData("");
+  CKEDITOR.instances["editor_2"].setData("");
  }
 
  handleCKEditorChange(data){
