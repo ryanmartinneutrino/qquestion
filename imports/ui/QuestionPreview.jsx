@@ -1,18 +1,8 @@
-import React, { Component, PropTypes } from 'react';
- 
-import { createContainer } from 'meteor/react-meteor-data';
-
-import { Meteor } from 'meteor/meteor';
- 
-import { Questions } from '../api/questions.js';
-
+import React, { Component } from 'react';
+import HtmlView from './HtmlView.jsx'; 
  
 // App component - represents the whole app
 export default class QuestionPreview extends Component {
-
- question_html() {
-  return {__html: this.props.question.text} 
- }
 
  componentDidUpdate () {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
@@ -26,7 +16,7 @@ export default class QuestionPreview extends Component {
    else{
     return (
       <div className='container'>
-      <div dangerouslySetInnerHTML={this.question_html()} />  
+      <HtmlView html= {question.text } />
       </div>
     );
 

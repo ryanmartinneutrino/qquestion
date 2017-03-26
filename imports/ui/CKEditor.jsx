@@ -7,6 +7,7 @@ export default class CKEditor extends Component {
     super(props);
     this.elementName = "editor_" + this.props.id;
     this.componentDidMount = this.componentDidMount.bind(this);
+    //this.props = {inline : false, id:'1'}
   }
 
   render() {
@@ -22,8 +23,11 @@ export default class CKEditor extends Component {
       customConfig: '/ckeditor_config.js'
     };
     CKEDITOR.disableAutoInline = true;
-//    CKEDITOR.inline(this.elementName, configuration);
-    CKEDITOR.replace(this.elementName, configuration);
+    if(this.props.inline){
+      CKEDITOR.inline(this.elementName, configuration);
+    }else{
+      CKEDITOR.replace(this.elementName, configuration);
+    }
     CKEDITOR.instances[this.elementName].on("change", function () {
       let data = CKEDITOR.instances[this.elementName].getData();
       this.props.onChange(data);

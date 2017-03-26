@@ -35,8 +35,10 @@ export default class NewQuestionForm extends Component {
       <div className='container'>
        <form  className='NewQuestion' onSubmit={this.handleSubmit.bind(this)} >
         <h3> Type question: </h3>
-        <CKEditor id={1} onChange={this.handleCKEditorChange.bind(this)} />
-        <input type='submit' />
+        <CKEditor id={1} inline={false} onChange={this.handleCKEditorChange.bind(this)} />
+        <h3> Solution </h3>
+        <CKEditor id={2} inline={true} onChange={this.handleCKEditorChange.bind(this)} />
+        <input className='btn btn-default' type='submit' />
        </form>
       <h3> preview </h3>
       <QuestionPreview question={this.state.question} />
