@@ -7,26 +7,35 @@ import { Meteor } from 'meteor/meteor';
 import { Questions } from '../api/questions.js';
 
 import HtmlView from './HtmlView.jsx';
+import QuestionPreview from './QuestionPreview.jsx';
 
  
 // App component - represents the whole app
-export class QuestionView extends Component {
+export class QuestionList extends Component {
 
  componentDidUpdate () {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
 
+
+ renderQuestionList() {
+   questionList = this.props.questionList;
+   return questionList.map( (question) => (
+     <QuestionPreview key={question._id} question={question} />
+   ));
+ } 
+
  render() {
-   question = this.props.question;// ? this.props.questions : {text:'no question in db'} ;
-   if(this.props.loading || !question){
+   questionList = this.props.questionList;
+   if(this.props.loading || !questionList){
     return(  <HtmlView html="Loading..." />);
    }
    else{
     return (
       <div className='panel panel-primary'>
-        <div className="panel-heading">Question</div>
+        <div className="panel-heading">Questions</div>
         <div className="panel-body">
-          <HtmlView html= {question.text } />
+          { this.renderQuestionList() }
         </div>
       </div>
     );
@@ -35,21 +44,20 @@ export class QuestionView extends Component {
   }
 };
 
-QuestionView.propTypes = {
-  question: React.PropTypes.object,
+QuestionList.propTypes = {
+  questionList: React.PropTypes.array,
   loading: React.PropTypes.bool,
 };
 
-export default  QuestionViewContainer =  createContainer(() => {
+export default  QuestionListContainer =  createContainer(() => {
   const qhandle = Meteor.subscribe('questions');
   const loading = !qhandle.ready();   
-  question = Questions.findOne({}, {sort: {createdAt: -1}});
+  questionList = Questions.find({}, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
   return {
-    question: question,
+    questionList: questionList,
     loading: loading,
   };
-}, QuestionView);
-
+}, QuestionList);
 
 
 

@@ -17,7 +17,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about', groups: [ 'about' ] }
 	];
 
-        config.extraPlugins = 'mathjax';
+        config.extraPlugins = 'mathjax,uploadimage,image2';
+        config.uploadUrl= '/upload/image';
         config.mathJaxLib = 'http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
 	config.removeButtons = 'Save,NewPage,Preview,Print,Templates,Cut,Copy,Paste,Find,Replace,SelectAll,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,CreateDiv,Blockquote,BidiLtr,BidiRtl,Language,Flash,HorizontalRule,Smiley,PageBreak,Iframe,ShowBlocks,About';
 };
