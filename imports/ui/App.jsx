@@ -4,20 +4,28 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import QuestionViewContainer from './QuestionView.jsx';
 import NewQuestionForm from './NewQuestionForm.jsx';
+import Navbar from './Navbar.jsx';
 
  
 // App component - represents the whole app
-export default class App extends Component {
+export class App extends Component {
  render() {
     return (
       <div className="container">
         <header>
         </header>
-      <NewQuestionForm />
-      <br />
-      <h2> Last question from db </h2>
-      <QuestionViewContainer />
+        <Navbar />
+      {this.props.main}
       </div>
     );
   }
 }
+
+export default AppContainer = createContainer(props => {
+  // props here will have `main`, passed from the router
+  // anything we return from this function will be *added* to it
+  return {
+    user: Meteor.user(),
+  };
+}, App);
+

@@ -32,6 +32,37 @@ export default class CKEditor extends Component {
       let data = CKEDITOR.instances[this.elementName].getData();
       this.props.onChange(data);
     }.bind(this));
+
+/*    CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
+      var xhr = evt.data.fileLoader.xhr;
+
+      xhr.setRequestHeader( 'Cache-Control', 'no-cache' );
+      xhr.setRequestHeader( 'X-File-Name', this.fileName );
+      xhr.setRequestHeader( 'X-File-Size', this.total );
+      xhr.send( this.file );
+
+      // Prevented the default behavior.
+      evt.stop();
+     } );*/
+
+    //Need to figure this out!!!
+    CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
+      // Prevent the default response handler.
+      evt.stop();
+
+      // Get XHR and response.
+      var data = evt.data,
+        xhr = data.fileLoader.xhr,
+        response = xhr.responseText.split( '|' );
+      if ( response[ 1 ] ) {
+        // An error occurred during upload.
+        data.message = response[ 1 ];
+        evt.cancel();
+      } else {
+        data.url = response[ 0 ];
+       }
+     } );
+
   }
 }
 

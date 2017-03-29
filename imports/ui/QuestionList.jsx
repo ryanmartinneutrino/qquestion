@@ -49,7 +49,7 @@ QuestionList.propTypes = {
   loading: React.PropTypes.bool,
 };
 
-export default  QuestionListContainer =  createContainer(() => {
+export default  QuestionListContainer =  createContainer( () => {
   const qhandle = Meteor.subscribe('questions');
   const loading = !qhandle.ready();   
   questionList = Questions.find({}, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
