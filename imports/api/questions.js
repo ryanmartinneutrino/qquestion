@@ -3,11 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'; 
 
 export const Questions = new Mongo.Collection('questions');
-export const Images = new FS.Collection("images", {
+export const Images = new Mongo.Collection("images");
+/*export const Images = new FS.Collection("images", {
 // stores: [new FS.Store.FileSystem("images", {path: "/home/rmartin/qlicker/uploads"})]
   stores: [new FS.Store.GridFS("myImages")]
 });
-
+*/
 
 
 if (Meteor.isServer) {
@@ -39,24 +40,9 @@ Meteor.methods({
     });
 //    console.log("inserted from method with id ", id);
   },
-  'images.insert'(file){
-    
-    let id=Images.insert(file, (err, fileObj) => {
-      if (err){
-        const response = {
-          uploaded: 0,
-        }
-
-      }
-      else {
-        const response = {
-          uploaded: 1,
-          fileName: '/cfs/files/images/' + fileObj._id,
-          url: '/cfs/files/images/' + fileObj._id
-        }
-      }
-    });
-    return response;
+  'images.insert'(file){  
+    id=Images.insert(file);
+    console.log("inserted image with id"+id);
   },
 
   'tasks.remove'(taskId) {
