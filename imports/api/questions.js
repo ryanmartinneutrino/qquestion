@@ -40,8 +40,8 @@ Meteor.methods({
     });
 //    console.log("inserted from method with id ", id);
   },
-  'images.insert'(file){  
-    id=Images.insert(file);
+  'images.insert'(fileURL, filename){  
+    id=Images.insert({fileURL:fileURL, filename:filename} );
     console.log("inserted image with id"+id);
   },
 

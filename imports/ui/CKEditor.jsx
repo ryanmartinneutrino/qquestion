@@ -35,34 +35,38 @@ export default class CKEditor extends Component {
 
     CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
       let upload = evt.data.requestData.upload;
-      let filename = upload.name
-      let file = upload.file 
+      let filename = upload.name;
+      let file = upload.file;
+      var blob = file.__proto__.__proto__;
+      var reader = new FileReader();
+      reader.addEventListener("loadend", function() {
+        // gets triggered when file is read
+        const fileURL=reader.result;
+        Meteor.subscribe('images');
+        Meteor.call('images.insert', fileURL, filename);
+        evt.data.requestData.filename =filename;
+        evt.stop();
+      });
+     // reader.readAsDataURL(file);
       console.log(file);
-      Meteor.subscribe('images');
 
-      const response = Meteor.call('images.insert', file);
-      console.log(response);
       // Prevented the default behavior.
-      evt.stop();
+      //evt.stop();
      } );
 
     //Need to figure this out!!!
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
-
       console.log("here resp");
-      // Get XHR and response.
-      var data = evt.data,
-        xhr = data.fileLoader.xhr,
-        response = xhr.responseText.split( '|' );
-      if ( response[ 1 ] ) {
-        // An error occurred during upload.
-        data.message = response[ 1 ];
-        evt.cancel();
-      } else {
-        data.url = response[ 0 ];
-       }
+      var data = evt.data
+       
+      ihandle = Meteor.subscribe('images');
+      if(ihandle.ready()){
+        file = Images.findOne({});
+        data.url = file.fileURL;
+        console.log("done resp");
+      }
      } );
 
   }
