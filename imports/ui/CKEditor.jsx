@@ -1,6 +1,6 @@
 
 import React, {Component} from "react";
-
+import {Images} from '../api/questions.js';
 
 export default class CKEditor extends Component {
   constructor(props) {
@@ -33,23 +33,25 @@ export default class CKEditor extends Component {
       this.props.onChange(data);
     }.bind(this));
 
-/*    CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
-      var xhr = evt.data.fileLoader.xhr;
+    CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
+      let upload = evt.data.requestData.upload;
+      let filename = upload.name
+      let file = upload.file 
+      console.log(file);
+      Meteor.subscribe('images');
 
-      xhr.setRequestHeader( 'Cache-Control', 'no-cache' );
-      xhr.setRequestHeader( 'X-File-Name', this.fileName );
-      xhr.setRequestHeader( 'X-File-Size', this.total );
-      xhr.send( this.file );
-
+      const response = Meteor.call('images.insert', file);
+      console.log(response);
       // Prevented the default behavior.
       evt.stop();
-     } );*/
+     } );
 
     //Need to figure this out!!!
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
 
+      console.log("here resp");
       // Get XHR and response.
       var data = evt.data,
         xhr = data.fileLoader.xhr,

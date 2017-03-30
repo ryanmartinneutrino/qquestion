@@ -7,8 +7,8 @@ import App from '../imports/ui/App.jsx';
 
  
 Meteor.startup(() => {
-//  render(<App />, document.getElementById('render-target'));
-//  render(renderRoutes(), document.getElementById('render-target'));
+//  render(<App />, document.getElementById('react-root'));
+//  render(renderRoutes(), document.getElementById('react-root'));
 //  render( 
 //    <Router history={ browserHistory }>
 //      <Route path="/" component={ App } />
