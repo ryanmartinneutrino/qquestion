@@ -7,6 +7,8 @@ export default class CKEditor extends Component {
     super(props);
     this.elementName = "editor_" + this.props.id;
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.fileURLs=["blah"];
+    console.log("length "+this.fileURLs.length); 
     //this.props = {inline : false, id:'1'}
   }
 
@@ -42,32 +44,25 @@ export default class CKEditor extends Component {
       reader.addEventListener("loadend", function() {
         // gets triggered when file is read
         const fileURL=reader.result;
+        this.fileURLs.push(fileURL);
         Meteor.subscribe('images');
         Meteor.call('images.insert', fileURL, filename);
         evt.data.requestData.filename =filename;
         evt.stop();
-      });
-     // reader.readAsDataURL(file);
-      console.log(file);
+      }.bind(this));
+      reader.readAsDataURL(file);
 
       // Prevented the default behavior.
-      //evt.stop();
-     } );
+     // evt.stop();
+     }.bind(this));
+
 
     //Need to figure this out!!!
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
-      console.log("here resp");
-      var data = evt.data
-       
-      ihandle = Meteor.subscribe('images');
-      if(ihandle.ready()){
-        file = Images.findOne({});
-        data.url = file.fileURL;
-        console.log("done resp");
-      }
-     } );
+      evt.data.url = this.fileURLs[this.fileURLs.length - 1]; 
+     }.bind(this));
 
   }
 }
