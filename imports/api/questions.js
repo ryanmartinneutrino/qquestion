@@ -24,20 +24,21 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'questions.insert'(text) {
-    check(text, String);
+  'questions.insert'(question) {
+    check(question.text, String);
  
     // Make sure the user is logged in before inserting a task
     //if (! this.userId) {
     //  throw new Meteor.Error('not-authorized');
     //}
- 
-    id = Questions.insert({
+    id = Questions.insert(question); 
+  /*
+    id = Questions.insert(
       text:text,
       createdAt: new Date(),
       //owner: this.userId,
       //username: Meteor.users.findOne(this.userId).username,
-    });
+    });*/
 //    console.log("inserted from method with id ", id);
   },
   'images.insert'(fileURL, filename){  

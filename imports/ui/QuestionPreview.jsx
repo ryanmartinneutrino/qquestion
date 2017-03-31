@@ -16,9 +16,9 @@ export default class QuestionPreview extends Component {
    else{
     return (
       <div className='panel panel-default'>
-        <div className="panel-heading">Question Preview</div>
+        <div className="panel-heading"><HtmlView html={question.text} /></div>
         <div className="panel-body">
-          <HtmlView html= {question.text } />
+          <HtmlView html= {question.solution } />
         </div>
       </div>
     );

@@ -7,8 +7,7 @@ export default class CKEditor extends Component {
     super(props);
     this.elementName = "editor_" + this.props.id;
     this.componentDidMount = this.componentDidMount.bind(this);
-    this.fileURLs=["blah"];
-    console.log("length "+this.fileURLs.length); 
+    this.fileURLs=[];
     //this.props = {inline : false, id:'1'}
   }
 

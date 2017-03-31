@@ -11,24 +11,34 @@ export default class NewQuestionForm extends Component {
  constructor(props) {
    super(props);
    this.state = {
-        question:{text:"", type:"MC", isPublic:true, solution:"", tags:[]},
+        question:{createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]},
    }
   };
 
  handleSubmit(event){
   event.preventDefault();
+  let question = this.state.question;
+  question.createdAt= new Date();
   //Build question and insert into database
   Meteor.subscribe('questions');
-  Meteor.call('questions.insert', this.state.question.text);
-  console.log("inserted question with  text: "+ this.state.question.text);
+  Meteor.call('questions.insert', question);
+  console.log("inserted question ");
   // Clear form
+  question={createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]}
+  this.setState({question: question} );
   CKEDITOR.instances["editor_1"].setData("");
   CKEDITOR.instances["editor_2"].setData("");
  }
 
- handleCKEditorChange(data){
+ handleCKEditorChangeQuestion(data){
   let question = this.state.question;
   question.text=data;
+  this.setState({question: question} );
+ }
+
+ handleCKEditorChangeSolution(data){
+  let question = this.state.question;
+  question.solution=data;
   this.setState({question: question} );
  }
 
@@ -69,9 +79,9 @@ export default class NewQuestionForm extends Component {
               <input type="checkbox" name="isPublic" onChange={this.handlePublicChange.bind(this)} checked={this.state.question.public}  value={true} /> Public <br/>
               Tags (comma separated): <input type="text" name="tags" onChange={this.handleTagsChange.bind(this)}  />
               <h3> Type question: </h3>
-              <CKEditor id={1} inline={false} onChange={this.handleCKEditorChange.bind(this)} />
+              <CKEditor id={1} inline={false} onChange={this.handleCKEditorChangeQuestion.bind(this)} />
               <h3> Type solution: </h3>
-              <CKEditor id={2} inline={true} onChange={this.handleCKEditorChange.bind(this)} />
+              <CKEditor id={2} inline={true} onChange={this.handleCKEditorChangeSolution.bind(this)} />
              <input className='btn btn-default' type='submit' />
            </form>
 
