@@ -34,23 +34,32 @@ export default class CKEditor extends Component {
       this.props.onChange(data);
     }.bind(this));
 
+    CKEDITOR.instances[this.elementName].on("afterInsertHtml", function () {
+      //Need this to detect the html chaning from a file upload.
+      let data = CKEDITOR.instances[this.elementName].getData();
+      this.props.onChange(data);
+    }.bind(this));
+
     CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
       let upload = evt.data.requestData.upload;
       let filename = upload.name;
       let file = upload.file;
-      var blob = file.__proto__.__proto__;
       var reader = new FileReader();
+      console.log(evt);
       reader.addEventListener("loadend", function() {
         // gets triggered when file is read
+        //TODO: This never gets called for a large jpeg???
         const fileURL=reader.result;
         this.fileURLs.push(fileURL);
-        Meteor.subscribe('images');
+        console.log("Sending");
+        //console.log(fileURL);
+
         Meteor.call('images.insert', fileURL, filename);
         evt.data.requestData.filename =filename;
         evt.stop();
       }.bind(this));
       reader.readAsDataURL(file);
-
+    
       // Prevented the default behavior.
      // evt.stop();
      }.bind(this));
@@ -60,7 +69,14 @@ export default class CKEditor extends Component {
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
-      evt.data.url = this.fileURLs[this.fileURLs.length - 1]; 
+      console.log("In resp");
+      console.log(evt.data);
+      if (this.fileURLs[this.fileURLs.length - 1]){
+        evt.data.url = this.fileURLs[this.fileURLs.length - 1];
+      } else{
+        console.log("canceled inresponse");
+        evt.cancel();
+      } 
      }.bind(this));
 
   }

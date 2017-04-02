@@ -19,8 +19,12 @@ export default class NewQuestionForm extends Component {
   event.preventDefault();
   let question = this.state.question;
   question.createdAt= new Date();
+  //Might not need these as onChange() of CKEditor should keep them up to date:
+  //question.text=CKEDITOR.instances["editor_1"].getData();
+  //question.solution=CKEDITOR.instances["editor_2"].getData();
+
   //Build question and insert into database
-  Meteor.subscribe('questions');
+//  Meteor.subscribe('questions');
   Meteor.call('questions.insert', question);
   console.log("inserted question ");
   // Clear form

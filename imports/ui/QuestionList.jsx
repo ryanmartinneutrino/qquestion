@@ -50,9 +50,10 @@ QuestionList.propTypes = {
 };
 
 export default  QuestionListContainer =  createContainer( () => {
-  const qhandle = Meteor.subscribe('questions');
-  const loading = !qhandle.ready();   
+//  const qhandle = Meteor.subscribe('questions');
+//  const loading = !qhandle.ready();   
   questionList = Questions.find({}, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
+  const loading = questionList ? false:true;
   return {
     questionList: questionList,
     loading: loading,

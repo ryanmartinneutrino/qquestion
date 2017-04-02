@@ -41,9 +41,10 @@ QuestionView.propTypes = {
 };
 
 export default  QuestionViewContainer =  createContainer(() => {
-  const qhandle = Meteor.subscribe('questions');
-  const loading = !qhandle.ready();   
+//  const qhandle = Meteor.subscribe('questions');
+//  const loading = !qhandle.ready();   
   question = Questions.findOne({}, {sort: {createdAt: -1}});
+  const loading = question ? false:true;
   return {
     question: question,
     loading: loading,
