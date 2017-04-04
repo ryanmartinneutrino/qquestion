@@ -4,12 +4,12 @@ import { check } from 'meteor/check';
 
 export const Questions = new Mongo.Collection('questions');
 export const Images = new Mongo.Collection("images");
-/*
-export const Images = new FS.Collection("images", {
-  stores: [new FS.Store.FileSystem("images")]
+
+export const ImagesFS = new FS.Collection("imagesfs", {
+  stores: [new FS.Store.FileSystem("imagesfs")]
   //stores: [new FS.Store.GridFS("myImages")]
 });
-*/
+
 
 
 if (Meteor.isServer) {
@@ -17,14 +17,29 @@ if (Meteor.isServer) {
   Meteor.publish('questions', function questionsPublication() {
     return Questions.find();
   });
-/*
-  Images.allow({
+
+  ImagesFS.allow({
     'insert': function () {
       // add custom authentication code here
      return true;
-    }
+    },
+    'update': function () {
+      // add custom authentication code here
+     return true;
+    },
+    'remove': function () {
+      // add custom authentication code here
+     return true;
+    },
+    'download': function () {
+      // add custom authentication code here
+     return true;
+    },
+
+
+
   });
-*/
+
   Meteor.publish('images', function imagePublication() {
     return Images.find();
   });

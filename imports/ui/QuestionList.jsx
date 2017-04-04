@@ -13,6 +13,11 @@ import QuestionPreview from './QuestionPreview.jsx';
 // App component - represents the whole app
 export class QuestionList extends Component {
 
+ componentDidMount () {
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+  }
+
+
  componentDidUpdate () {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }

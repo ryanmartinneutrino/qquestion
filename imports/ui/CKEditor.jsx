@@ -1,6 +1,6 @@
 
 import React, {Component} from "react";
-import {Images} from '../api/questions.js';
+import {Images, ImagesFS} from '../api/questions.js';
 
 export default class CKEditor extends Component {
   constructor(props) {
@@ -53,9 +53,22 @@ export default class CKEditor extends Component {
         this.fileURLs.push(fileURL);
         console.log("Sending");
         //console.log(fileURL);
-
+/*      
+        let fsFile = new FS.File();
+        fsFile.attachData(fileURL,  function(error) {
+          if (error) resolve(error, null);
+          ImagesFS.insert(fsFile, function (err, fileObj) {
+            console.log("FS collection inserted with id "+fileObj._id);
+          });
+        });
+*/
+        ImagesFS.insert(fileURL,function (err, fileObj) {
+        // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+          console.log("FS collection inserted with id "+fileObj._id);
+        });
+      
         Meteor.call('images.insert', fileURL, filename);
-        evt.data.requestData.filename =filename;
+        //evt.data.requestData.filename =filename;
         evt.stop();
       }.bind(this));
       reader.readAsDataURL(file);
@@ -70,6 +83,7 @@ export default class CKEditor extends Component {
       // Prevent the default response handler.
       evt.stop();
       console.log("In resp");
+      console.log("URL from FS: "+ImagesFS.findOne().url());
       console.log(evt.data);
       if (this.fileURLs[this.fileURLs.length - 1]){
         evt.data.url = this.fileURLs[this.fileURLs.length - 1];
