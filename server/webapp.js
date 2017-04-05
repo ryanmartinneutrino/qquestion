@@ -33,7 +33,7 @@ WebApp.connectHandlers.use('/upload/image',function(req,res,next){
      response = {
       "uploaded": 1,
       "fileName": "testfile.png",
-      "url": "/cfs/files/images/testfile.png"
+      "url": "/home/rmartin/qquestion/upload"+fileNames[0],
       };
      res.end(JSON.stringify(response));
    });

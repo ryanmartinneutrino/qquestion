@@ -8,6 +8,7 @@ export default class CKEditor extends Component {
     this.elementName = "editor_" + this.props.id;
     this.componentDidMount = this.componentDidMount.bind(this);
     this.fileURLs=[];
+    this.lastFileURL="http://www.freeiconspng.com/uploads/load-icon-png-22.png";
     //this.props = {inline : false, id:'1'}
   }
 
@@ -44,29 +45,24 @@ export default class CKEditor extends Component {
       let upload = evt.data.requestData.upload;
       let filename = upload.name;
       let file = upload.file;
+
       var reader = new FileReader();
-      console.log(evt);
+      console.log(file);
       reader.addEventListener("loadend", function() {
         // gets triggered when file is read
         //TODO: This never gets called for a large jpeg???
         const fileURL=reader.result;
         this.fileURLs.push(fileURL);
         console.log("Sending");
-        //console.log(fileURL);
-/*      
-        let fsFile = new FS.File();
-        fsFile.attachData(fileURL,  function(error) {
-          if (error) resolve(error, null);
-          ImagesFS.insert(fsFile, function (err, fileObj) {
-            console.log("FS collection inserted with id "+fileObj._id);
-          });
-        });
-*/
+        
         ImagesFS.insert(fileURL,function (err, fileObj) {
         // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
           console.log("FS collection inserted with id "+fileObj._id);
-        });
-      
+          this.lastFileURL=fileObj.url({brokenIsFine:true});
+          console.log("url for FS after insert is "+this.lastFileURL);
+        }.bind(this))
+        
+
         Meteor.call('images.insert', fileURL, filename);
         //evt.data.requestData.filename =filename;
         evt.stop();
@@ -77,20 +73,25 @@ export default class CKEditor extends Component {
      // evt.stop();
      }.bind(this));
 
+    //TODO: Need a timeout before the response to give time for the file to upload!
 
     //Need to figure this out!!!
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
       console.log("In resp");
-      console.log("URL from FS: "+ImagesFS.findOne().url());
+      console.log("URL from FS: "+this.lastFileURL);
       console.log(evt.data);
+
+
       if (this.fileURLs[this.fileURLs.length - 1]){
         evt.data.url = this.fileURLs[this.fileURLs.length - 1];
+        //evt.data.url = this.lastFileURL;
       } else{
         console.log("canceled inresponse");
         evt.cancel();
-      } 
+      }
+ 
      }.bind(this));
 
   }
