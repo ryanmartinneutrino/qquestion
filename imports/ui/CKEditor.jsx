@@ -47,25 +47,23 @@ export default class CKEditor extends Component {
       let file = upload.file;
 
       var reader = new FileReader();
-      console.log(file);
+      console.log("In upload request");
       reader.addEventListener("loadend", function() {
         // gets triggered when file is read
         //TODO: This never gets called for a large jpeg???
         const fileURL=reader.result;
         this.fileURLs.push(fileURL);
-        console.log("Sending");
+        console.log("Starting insert");
         
         ImagesFS.insert(fileURL,function (err, fileObj) {
         // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
           console.log("FS collection inserted with id "+fileObj._id);
           this.lastFileURL=fileObj.url({brokenIsFine:true});
           console.log("url for FS after insert is "+this.lastFileURL);
-        }.bind(this))
+        }.bind(this)) ;
         
 
-        Meteor.call('images.insert', fileURL, filename);
-        //evt.data.requestData.filename =filename;
-        evt.stop();
+       // evt.stop();
       }.bind(this));
       reader.readAsDataURL(file);
     
@@ -75,7 +73,6 @@ export default class CKEditor extends Component {
 
     //TODO: Need a timeout before the response to give time for the file to upload!
 
-    //Need to figure this out!!!
     CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();

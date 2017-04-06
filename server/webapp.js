@@ -20,6 +20,8 @@ WebApp.connectHandlers.use('/upload/image',function(req,res,next){
   }));
 
 */
+
+
   fileNames = [];
   var busboy = new Busboy({ headers: req.headers })
   busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
@@ -32,9 +34,10 @@ WebApp.connectHandlers.use('/upload/image',function(req,res,next){
      res.writeHead(200);
      response = {
       "uploaded": 1,
-      "fileName": "testfile.png",
-      "url": "/home/rmartin/qquestion/upload"+fileNames[0],
+      "fileName": fileNames[0],
+      "url": fileNames[0], //ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
       };
+
      res.end(JSON.stringify(response));
    });
   req.pipe(busboy)
