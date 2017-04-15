@@ -26,6 +26,7 @@ export default AppContainer = createContainer(props => {
   // anything we return from this function will be *added* to it
   Meteor.subscribe('questions');
   Meteor.subscribe('images');
+  Meteor.subscribe('files.images.all');
 
   return {
     user: Meteor.user(),

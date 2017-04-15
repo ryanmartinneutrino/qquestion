@@ -1,6 +1,6 @@
 
 import React, {Component} from "react";
-import {Images, ImagesFS} from '../api/questions.js';
+import {Images, ImagesFS, ImagesMF} from '../api/questions.js';
 
 export default class CKEditor extends Component {
   constructor(props) {
@@ -30,23 +30,26 @@ export default class CKEditor extends Component {
     }else{
       CKEDITOR.replace(this.elementName, configuration);
     }
-    CKEDITOR.instances[this.elementName].on("change", function () {
+    this.editor=CKEDITOR.instances[this.elementName]
+
+    this.editor.on("change", function () {
       let data = CKEDITOR.instances[this.elementName].getData();
       this.props.onChange(data);
     }.bind(this));
 
-    CKEDITOR.instances[this.elementName].on("afterInsertHtml", function () {
+    this.editor.on("afterInsertHtml", function () {
       //Need this to detect the html chaning from a file upload.
       let data = CKEDITOR.instances[this.elementName].getData();
       this.props.onChange(data);
+      console.log("afterInsertHtml event");
     }.bind(this));
 
-    CKEDITOR.instances[this.elementName].on( 'fileUploadRequest', function( evt ) {
+    this.editor.on( 'fileUploadRequest', function( evt ) {
       let upload = evt.data.requestData.upload;
       let filename = upload.name;
       let file = upload.file;
-
       var reader = new FileReader();
+
       console.log("In upload request");
       reader.addEventListener("loadend", function() {
         // gets triggered when file is read
@@ -61,29 +64,29 @@ export default class CKEditor extends Component {
           this.lastFileURL=fileObj.url({brokenIsFine:true});
           console.log("url for FS after insert is "+this.lastFileURL);
         }.bind(this)) ;
-        
 
-       // evt.stop();
+        //evt.cancel();
       }.bind(this));
       reader.readAsDataURL(file);
-    
       // Prevented the default behavior.
      // evt.stop();
      }.bind(this));
 
     //TODO: Need a timeout before the response to give time for the file to upload!
 
-    CKEDITOR.instances[this.elementName].on( 'fileUploadResponse', function( evt ) {
+    this.editor.on( 'fileUploadResponse', function( evt ) {
       // Prevent the default response handler.
       evt.stop();
       console.log("In resp");
       console.log("URL from FS: "+this.lastFileURL);
-      console.log(evt.data);
+    //  console.log("Last file in meteor files: "+ImagesMF.findOne().link());
+      console.log(evt);
 
 
       if (this.fileURLs[this.fileURLs.length - 1]){
-        evt.data.url = this.fileURLs[this.fileURLs.length - 1];
-        //evt.data.url = this.lastFileURL;
+        //evt.data.url = this.fileURLs[this.fileURLs.length - 1];
+        evt.data.url = this.lastFileURL;
+        //evt.data.url = ImagesMF.findOne().link();
       } else{
         console.log("canceled inresponse");
         evt.cancel();

@@ -21,7 +21,6 @@ WebApp.connectHandlers.use('/upload/image',function(req,res,next){
 
 */
 
-
   fileNames = [];
   var busboy = new Busboy({ headers: req.headers })
   busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
@@ -32,14 +31,25 @@ WebApp.connectHandlers.use('/upload/image',function(req,res,next){
 
   busboy.on('finish', function () {
      res.writeHead(200);
-     response = {
-      "uploaded": 1,
-      "fileName": fileNames[0],
-      "url": fileNames[0], //ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
-      };
+//     response = {
+//      "uploaded": 1,
+//      "fileName": fileNames[0],
+//      "url": fileNames[0], //ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
+      //"url": ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
+//      };
+      setTimeout(() => { // wait for cfs to make image available
+        response = {
+        "uploaded": 1,
+        "fileName": fileNames[0],
+        "url": fileNames[0], //ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
+        //"url": ImagesFS.findOne({filename:fileNames[0]}).url({brokenIsFine:true}),
+        }  ;
 
-     res.end(JSON.stringify(response));
+          res.end(JSON.stringify(response))
+        }, 5000)
+
    });
   req.pipe(busboy)
+  //Meteor._sleepForMs(2000);
 
 });
