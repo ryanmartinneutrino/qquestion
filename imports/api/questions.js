@@ -73,6 +73,11 @@ Meteor.methods({
     //  throw new Meteor.Error('not-authorized');
     //}
     id = Questions.insert(question); 
+    return id;
+  },
+
+  'questions.update'(question){
+    Questions.update({_id:question._id},question);
   },
   
   'questions.delete'(qid){

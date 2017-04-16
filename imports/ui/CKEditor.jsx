@@ -9,6 +9,8 @@ export default class CKEditor extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
     this.fileURLs=[];
     this.lastFileURL="http://www.freeiconspng.com/uploads/load-icon-png-22.png";
+    var data = this.props.data ? this.props.data : "" ;
+    this.state = { data: data};
     //this.props = {inline : false, id:'1'}
   }
 
@@ -31,7 +33,7 @@ export default class CKEditor extends Component {
       CKEDITOR.replace(this.elementName, configuration);
     }
     this.editor=CKEDITOR.instances[this.elementName]
-
+    this.editor.setData(this.state.data);
     this.editor.on("change", function () {
       let data = CKEDITOR.instances[this.elementName].getData();
       this.props.onChange(data);

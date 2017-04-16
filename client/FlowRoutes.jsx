@@ -2,9 +2,12 @@ import React from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
+import { Questions } from '../imports/api/questions.js';
+
 import QuestionList from '../imports/ui/QuestionList.jsx';
 import QuestionView from '../imports/ui/QuestionView.jsx';
 import NewQuestionForm from '../imports/ui/NewQuestionForm.jsx';
+import QuestionEdit from '../imports/ui/QuestionEdit.jsx';
 import AppContainer from '../imports/ui/App.jsx'
 
 
@@ -18,7 +21,7 @@ FlowRouter.route('/', {
 });
 
 FlowRouter.route('/library', {
-  name: 'AppContainer',
+  name: 'library',
   action() {
     mount(AppContainer, {
       main: <QuestionList/>,
@@ -33,19 +36,20 @@ var editorSection = FlowRouter.group({
 
 
 editorSection.route('/', {
-  name: 'AppContainer',
+  name: 'editor',
   action: function(params) {
       mount(AppContainer, {
-        main: <NewQuestionForm/>,
+        main: <QuestionEdit/>,
       });
   },
 });
 
-editorSection.route('/:id', {
-  name: 'AppContainer',
+editorSection.route('/:_id', {
+  name: 'editor/_id',
   action: function(params) {
+    question = Questions.findOne({"_id":params._id});
       mount(AppContainer, {
-        main: <NewQuestionForm question_id={params.id}/>,
+        main: <QuestionEdit question={question} />,
       });
   },
 });
