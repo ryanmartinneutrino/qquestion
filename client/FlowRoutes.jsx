@@ -26,14 +26,30 @@ FlowRouter.route('/library', {
   },
 });
 
-FlowRouter.route('/editor', {
+
+var editorSection = FlowRouter.group({
+    prefix: "/editor"
+});
+
+
+editorSection.route('/', {
   name: 'AppContainer',
-  action() {
-    mount(AppContainer, {
-      main: <NewQuestionForm/>,
-    });
+  action: function(params) {
+      mount(AppContainer, {
+        main: <NewQuestionForm/>,
+      });
   },
 });
+
+editorSection.route('/:id', {
+  name: 'AppContainer',
+  action: function(params) {
+      mount(AppContainer, {
+        main: <NewQuestionForm question_id={params.id}/>,
+      });
+  },
+});
+
 
 
 

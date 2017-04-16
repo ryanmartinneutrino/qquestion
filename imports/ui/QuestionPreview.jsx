@@ -35,18 +35,16 @@ export default class QuestionPreview extends Component {
     if (question._id){
       deleteButton = <button type="button" className="btn btn-danger" onClick={this.handleDelete.bind(this)} >
              <span className="glyphicon glyphicon-remove" ></span>
-             <br />
            </button> ;
-      editButton = <button type="button" className="btn btn-info" onClick={this.handleEdit.bind(this)} >
+      editButton = <a href={"/editor/"+question._id} >
              <span className="glyphicon glyphicon-edit" ></span>
-             <br />
-           </button> ;
+           </a> ;
 
     }
     return (
       <div className='panel panel-default'>
         <div className="panel-heading">
-           {deleteButton} {editButton} 
+           {deleteButton} {editButton} <br /> 
            Question: {this.props.question._id} <br />
            <HtmlView html={question.text} />
         </div>
