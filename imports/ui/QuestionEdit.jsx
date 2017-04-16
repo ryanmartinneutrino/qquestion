@@ -2,23 +2,27 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { Questions } from '../api/questions.js';
 import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
+
 import CKEditor from './CKEditor.jsx';
 import QuestionPreview from './QuestionPreview.jsx';
 
 const emptyQuestion = {createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]};
  
-export default class QuestionEdit extends Component {
+export class QuestionEdit extends Component {
 
  constructor(props) {
    super(props);
-   question = emptyQuestion;
-   if (this.props.question){
-     question=this.props.question;
-   }
    this.state = {
-        question:question,
-   }
+     question:this.props.question,
+   };
+
   };
+
+ componentWillMount(){
+   this.setState( { question: this.props.question});  
+ }
+
 
  handleSave(event){
   event.preventDefault();
@@ -102,7 +106,11 @@ export default class QuestionEdit extends Component {
 
  render() {
 
-    return (
+    if(this.props.loading){
+      return (<div> Loading </div>);
+    }
+    else{
+      return (
         <div className='panel panel-primary'>
           <div className="panel-heading">{this.state.question._id ? "Edit Question" : "New Question"}</div>
           <div className="panel-body">
@@ -125,11 +133,35 @@ export default class QuestionEdit extends Component {
            <QuestionPreview question={this.state.question} />
          </div>
        </div>
-    );
+    )
+   }
   }
 }
 
 
+QuestionEdit.propTypes = {
+  question: React.PropTypes.object,
+  loading: React.PropTypes.bool,
+};
 
+
+export default QuestionEditContainer =  createContainer( () => {
+//  const qhandle = Meteor.subscribe('questions');
+//  const loading = !qhandle.ready();
+  qid = FlowRouter.getParam("_id");
+  var loading = false;
+  question = emptyQuestion;
+  if (qid){
+  //  console.log("loading question "+qid);
+    question = Questions.findOne({_id:qid});
+    loading = question ? false:true;
+//    console.log(question);
+  }
+
+  return {
+    question: question,
+    loading: loading,
+  };
+}, QuestionEdit);
 
 

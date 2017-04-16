@@ -49,7 +49,7 @@ editorSection.route('/:_id', {
   action: function(params) {
     question = Questions.findOne({"_id":params._id});
       mount(AppContainer, {
-        main: <QuestionEdit question={question} />,
+        main: <QuestionEdit  />,
       });
   },
 });
