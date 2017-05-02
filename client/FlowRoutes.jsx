@@ -7,7 +7,7 @@ import { Questions } from '../imports/api/questions.js';
 import QuestionList from '../imports/ui/QuestionList.jsx';
 import QuestionView from '../imports/ui/QuestionView.jsx';
 import NewQuestionForm from '../imports/ui/NewQuestionForm.jsx';
-import QuestionEdit from '../imports/ui/QuestionEdit.jsx';
+import QuestionEditContainer from '../imports/ui/QuestionEdit.jsx';
 import AppContainer from '../imports/ui/App.jsx'
 
 
@@ -39,7 +39,7 @@ editorSection.route('/', {
   name: 'editor',
   action: function(params) {
       mount(AppContainer, {
-        main: <QuestionEdit/>,
+        main: <QuestionEditContainer/>,
       });
   },
 });
@@ -47,9 +47,8 @@ editorSection.route('/', {
 editorSection.route('/:_id', {
   name: 'editor/_id',
   action: function(params) {
-    question = Questions.findOne({"_id":params._id});
       mount(AppContainer, {
-        main: <QuestionEdit  />,
+        main: <QuestionEditContainer  />,
       });
   },
 });

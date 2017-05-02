@@ -7,22 +7,22 @@ import { createContainer } from 'meteor/react-meteor-data';
 import CKEditor from './CKEditor.jsx';
 import QuestionPreview from './QuestionPreview.jsx';
 
-const emptyQuestion = {createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]};
  
 export class QuestionEdit extends Component {
 
  constructor(props) {
    super(props);
-   this.state = {
-     question:this.props.question,
-   };
-
   };
+
 
  componentWillMount(){
    this.setState( { question: this.props.question});  
  }
 
+ componentWillReceiveProps(nextProps){
+ //typically called once the question has loaded from the db
+   this.setState({question: nextProps.question});
+ }
 
  handleSave(event){
   event.preventDefault();
@@ -31,42 +31,42 @@ export class QuestionEdit extends Component {
   if (question._id){
     question.updatedAt= new Date();
     Meteor.call('questions.update', question);
-    console.log("updated question");
+    //console.log("updated question");
     FlowRouter.go('editor/_id', {_id:this.state.question._id});
   }else{
     question.createdAt= new Date();
     Meteor.call('questions.insert', question, function(error, result){
       question._id=result
       this.setState({question: question} );
-      console.log("inserted question with id"+question._id );
-    FlowRouter.go('editor/_id', {_id:this.state.question._id});
+      //console.log("inserted question with id"+question._id );
+      FlowRouter.go('editor/_id', {_id:this.state.question._id});
     }.bind(this));
   }
  }
 
  handleSaveAndNew(event){
- //TODO: This does not work, it still remembers the old question.
   event.preventDefault();
+  var emptyQuestion = { createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]};
   let question = this.state.question;
 
   if (question._id){
     question.updatedAt= new Date();
     Meteor.call('questions.update', question, function(error,result){
-      console.log("updated question");
+      //console.log("updated question");
       this.setState({question: emptyQuestion} );
-      FlowRouter.go('/editor');      
+      FlowRouter.go('editor/_id', {_id:this.state.question._id});
     }.bind(this));
   }else{
     question.createdAt= new Date();
     Meteor.call('questions.insert', question, function(error, result){
       question._id=result
-      console.log("inserted question with id"+question._id );
+      //console.log("inserted question with id"+question._id );
       this.setState({question: emptyQuestion} );
       FlowRouter.go('/editor');
     }.bind(this));
   }
-  //this.setState({question: emptyQuestion} );
-  //FlowRouter.go('/editor');
+   CKEDITOR.instances["editor_QuestionText"].setData("");
+   CKEDITOR.instances["editor_SolutionText"].setData("");
  }
 
  handleCKEditorChangeQuestion(data){
@@ -99,14 +99,14 @@ export class QuestionEdit extends Component {
   let question = this.state.question;
   value = changeEvent.target.value;
   question.tags = value.replace(/^\s+|\s+$/g,"").split(/\s*,\s*/);;
-  console.log(question.tags);
+  //console.log(question.tags);
   this.setState({question: question} );
 
  }
 
  render() {
 
-    if(this.props.loading){
+    if(this.props.loading || !this.state.question){
       return (<div> Loading </div>);
     }
     else{
@@ -123,9 +123,9 @@ export class QuestionEdit extends Component {
               <input type="checkbox" name="isPublic" onChange={this.handlePublicChange.bind(this)} checked={this.state.question.public}  value={true} /> Public <br/>
               Tags (comma separated): <input type="text" name="tags" onChange={this.handleTagsChange.bind(this)}  />
               <h3> Type question: </h3>
-              <CKEditor id={1} inline={false} onChange={this.handleCKEditorChangeQuestion.bind(this)} data={this.state.question.text} />
+              <CKEditor id={"QuestionText"} inline={false} onChange={this.handleCKEditorChangeQuestion.bind(this)} data={this.state.question.text} />
               <h3> Type solution: </h3>
-              <CKEditor id={2} inline={true} onChange={this.handleCKEditorChangeSolution.bind(this)} data={this.state.question.solution} />
+              <CKEditor id={"SolutionText"} inline={true} onChange={this.handleCKEditorChangeSolution.bind(this)} data={this.state.question.solution} />
              <button className='btn btn-default' onClick={this.handleSave.bind(this)} > Save </button>
              <button className='btn btn-default' onClick={this.handleSaveAndNew.bind(this)} > Save and New </button>
            </form>
@@ -144,20 +144,18 @@ QuestionEdit.propTypes = {
   loading: React.PropTypes.bool,
 };
 
-
+//This is not setting this.props once the question has loaded...
 export default QuestionEditContainer =  createContainer( () => {
-//  const qhandle = Meteor.subscribe('questions');
-//  const loading = !qhandle.ready();
+  var emptyQuestion = { createdAt:"", text:"", type:"MC", isPublic:true, solution:"", tags:[]};
   qid = FlowRouter.getParam("_id");
   var loading = false;
-  question = emptyQuestion;
+  let question = emptyQuestion;
   if (qid){
-  //  console.log("loading question "+qid);
+    console.log("loading question from db "+qid);
+    qhandle = Meteor.subscribe('questions');
+    loading = !qhandle.ready()
     question = Questions.findOne({_id:qid});
-    loading = question ? false:true;
-//    console.log(question);
   }
-
   return {
     question: question,
     loading: loading,
