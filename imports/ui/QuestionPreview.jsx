@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HtmlView from './HtmlView.jsx'; 
- 
+import TagsInput from 'react-tagsinput' 
 // App component - represents the whole app
 export default class QuestionPreview extends Component {
 
@@ -21,6 +21,17 @@ export default class QuestionPreview extends Component {
   handleEdit(evt){
 
 
+  }
+
+  handleTagsChange(tags){
+    if(this.props.question){
+      console.log("updating question tags "+this.props.question._id);
+      Meteor.call('questions.updateTags', this.props.question._id, tags);
+    }
+    else{
+      console.log("no question to delete");
+    }
+  
   }
 
   render() {
@@ -46,6 +57,7 @@ export default class QuestionPreview extends Component {
         <div className="panel-heading">
            {deleteButton} {editButton} <br /> 
            Question: {this.props.question._id} <br />
+           <TagsInput value = {this.props.question.tags} onChange={this.handleTagsChange.bind(this)} />
            <HtmlView html={question.text} />
         </div>
         <div className="panel-body">

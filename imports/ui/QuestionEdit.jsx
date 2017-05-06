@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import CKEditor from './CKEditor.jsx';
 import QuestionPreview from './QuestionPreview.jsx';
-
+import TagsInput from 'react-tagsinput'
  
 export class QuestionEdit extends Component {
 
@@ -95,11 +95,13 @@ export class QuestionEdit extends Component {
   this.setState({question: question} );
  }
 
- handleTagsChange(changeEvent){
+
+ handleTagsChange(tags){
   let question = this.state.question;
-  value = changeEvent.target.value;
-  question.tags = value.replace(/^\s+|\s+$/g,"").split(/\s*,\s*/);;
-  //console.log(question.tags);
+  question.tags=tags;
+  //value = changeEvent.target.value;
+  //question.tags = value.replace(/^\s+|\s+$/g,"").split(/\s*,\s*/);;
+  ////console.log(question.tags);
   this.setState({question: question} );
 
  }
@@ -121,7 +123,7 @@ export class QuestionEdit extends Component {
               <input type="radio" name="type" value="TF" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "TF"} /> True/False  
               <input type="radio" name="type" value="SA" onChange={this.handleTypeChange.bind(this)} checked={this.state.question.type === "SA"} /> Short Answer <br/>
               <input type="checkbox" name="isPublic" onChange={this.handlePublicChange.bind(this)} checked={this.state.question.public}  value={true} /> Public <br/>
-              Tags (comma separated): <input type="text" name="tags" onChange={this.handleTagsChange.bind(this)}  />
+              <TagsInput onChange={this.handleTagsChange.bind(this)} value={this.state.question.tags} />
               <h3> Type question: </h3>
               <CKEditor id={"QuestionText"} inline={false} onChange={this.handleCKEditorChangeQuestion.bind(this)} data={this.state.question.text} />
               <h3> Type solution: </h3>

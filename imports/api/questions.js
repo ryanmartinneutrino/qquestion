@@ -84,6 +84,9 @@ Meteor.methods({
     Questions.remove(qid);
   },
 
+  'questions.updateTags'(qid, tags){
+    Questions.update({_id:qid},{$set:{tags:tags}})
+  },
   'images.insert'(fileURL, filename){  
     id=Images.insert({fileURL:fileURL, filename:filename} );
     console.log("inserted image with id"+id);
