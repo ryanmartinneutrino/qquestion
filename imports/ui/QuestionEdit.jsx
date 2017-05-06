@@ -14,7 +14,6 @@ export class QuestionEdit extends Component {
    super(props);
   };
 
-
  componentWillMount(){
    this.setState( { question: this.props.question});  
  }
@@ -127,7 +126,7 @@ export class QuestionEdit extends Component {
               <h3> Type question: </h3>
               <CKEditor id={"QuestionText"} inline={false} onChange={this.handleCKEditorChangeQuestion.bind(this)} data={this.state.question.text} />
               <h3> Type solution: </h3>
-              <CKEditor id={"SolutionText"} inline={true} onChange={this.handleCKEditorChangeSolution.bind(this)} data={this.state.question.solution} />
+              <CKEditor id={"SolutionText"} inline={false} onChange={this.handleCKEditorChangeSolution.bind(this)} data={this.state.question.solution} />
              <button className='btn btn-default' onClick={this.handleSave.bind(this)} > Save </button>
              <button className='btn btn-default' onClick={this.handleSaveAndNew.bind(this)} > Save and New </button>
            </form>

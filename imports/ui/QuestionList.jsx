@@ -8,11 +8,11 @@ import QuestionPreview from './QuestionPreview.jsx';
 export default class QuestionList extends Component {
 
  componentDidMount () {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+//    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
 
  componentDidUpdate () {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+//    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
 
  renderQuestionList() {

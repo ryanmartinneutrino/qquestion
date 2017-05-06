@@ -4,7 +4,12 @@ import TagsInput from 'react-tagsinput'
 // App component - represents the whole app
 export default class QuestionPreview extends Component {
 
- componentDidUpdate () {
+  componentDidMount () {
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+  }
+
+  componentDidUpdate () {
+    console.log("preview update"+this.props.question._id)
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
 
@@ -58,10 +63,10 @@ export default class QuestionPreview extends Component {
            {deleteButton} {editButton} <br /> 
            Question: {this.props.question._id} <br />
            <TagsInput value = {this.props.question.tags} onChange={this.handleTagsChange.bind(this)} />
-           <HtmlView html={question.text} />
+           <HtmlView html={this.props.question.text} />
         </div>
         <div className="panel-body">
-          <HtmlView html= {question.solution } />
+          <HtmlView html= {this.props.question.solution } />
         </div>
       </div>
     );
