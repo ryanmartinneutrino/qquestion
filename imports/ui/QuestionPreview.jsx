@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import HtmlView from './HtmlView.jsx'; 
 import TagsInput from 'react-tagsinput' 
-// App component - represents the whole app
+
+
+
 export default class QuestionPreview extends Component {
 
   componentDidMount () {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+    console.log("preview mount: "+this.props.question._id)
+    if(this.props.question)  MathJax.Hub.Queue(['Typeset', MathJax.Hub,"qprev_"+this.props.question._id])
   }
 
   componentDidUpdate () {
-    console.log("preview update"+this.props.question._id)
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+    console.log("preview update: "+this.props.question._id)
+    if(this.props.question) MathJax.Hub.Queue(['Typeset', MathJax.Hub,"qprev_"+this.props.question._id])
   }
 
   handleDelete(evt){
@@ -24,7 +27,6 @@ export default class QuestionPreview extends Component {
   };
 
   handleEdit(evt){
-
 
   }
 
@@ -58,7 +60,7 @@ export default class QuestionPreview extends Component {
 
     }
     return (
-      <div className='panel panel-default'>
+      <div id={"qprev_"+this.props.question._id} className='panel panel-default'>
         <div className="panel-heading">
            {deleteButton} {editButton} <br /> 
            Question: {this.props.question._id} <br />

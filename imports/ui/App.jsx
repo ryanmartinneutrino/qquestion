@@ -24,9 +24,9 @@ export class App extends Component {
 export default AppContainer = createContainer(props => {
   // props here will have `main`, passed from the router
   // anything we return from this function will be *added* to it
-  Meteor.subscribe('questions');
-  Meteor.subscribe('images');
-  Meteor.subscribe('files.images.all');
+//  Meteor.subscribe('questions');
+//  Meteor.subscribe('images');
+//  Meteor.subscribe('files.images.all');
 
   return {
     user: Meteor.user(),

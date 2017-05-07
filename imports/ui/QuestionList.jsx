@@ -6,15 +6,15 @@ import QuestionPreview from './QuestionPreview.jsx';
  
 // App component - represents the whole app
 export default class QuestionList extends Component {
-
+/*
  componentDidMount () {
-//    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
 
  componentDidUpdate () {
-//    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
   }
-
+*/
  renderQuestionList() {
    questionList = this.props.questionList;
    return questionList.map( (question) => (

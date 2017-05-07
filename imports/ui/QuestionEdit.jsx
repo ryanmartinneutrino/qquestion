@@ -98,9 +98,6 @@ export class QuestionEdit extends Component {
  handleTagsChange(tags){
   let question = this.state.question;
   question.tags=tags;
-  //value = changeEvent.target.value;
-  //question.tags = value.replace(/^\s+|\s+$/g,"").split(/\s*,\s*/);;
-  ////console.log(question.tags);
   this.setState({question: question} );
 
  }
