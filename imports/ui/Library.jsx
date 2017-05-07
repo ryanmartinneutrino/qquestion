@@ -8,10 +8,13 @@ import { Questions } from '../api/questions.js';
 
 import HtmlView from './HtmlView.jsx';
 import QuestionList from './QuestionList.jsx';
-import SearchBox from './SearchBox.jsx';
+import QuestionSearch from './QuestionSearch.jsx';
 import TagsInput from 'react-tagsinput'
  
-// App component - represents the whole app
+
+//TODO: Library and QuestionSearch need to deal with the question list when they first mount!!!
+//then, Library doesn't need to be a container anymore, but QuestionSearch probably does...
+
 export class Library extends Component {
 
   constructor(props) {
@@ -26,24 +29,8 @@ export class Library extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState( { questionList: nextProps.questionList, loading:nextProps.loading});
   }
-
-  updateQuestionList(tags=[],andTags=false){
-
-    if (tags.length){
-      if (andTags === false){
-        questionList = Questions.find({ tags:{$in:tags}  }, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
-      }else{
-        var arr = []
-        console.log("the tags are ",tags)
-        for (var i=0; i < tags.length; i++){
-          arr.push({tags:tags[i]})
-        }
-        questionList = Questions.find({$and:arr}, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
-      }
-    }else{
-      questionList = Questions.find({ }, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
-    }
-    this.setState({questionList:questionList})
+  refreshQuestionList(questionList){
+    this.setState({questionList:questionList});
   }
 
   render() {
@@ -54,7 +41,7 @@ export class Library extends Component {
    else{
     return (
       <div className='panel panel-primary'>
-       <SearchBox updateQuestionList = {this.updateQuestionList.bind(this)} /> 
+       <QuestionSearch  onChange = {this.refreshQuestionList.bind(this)}/> 
        <div className="panel-heading">{this.state.questionList.length}  Questions</div>
        <QuestionList questionList= {this.state.questionList} loading={this.state.loading} />
       </div>
