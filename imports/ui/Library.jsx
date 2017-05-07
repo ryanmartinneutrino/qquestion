@@ -8,6 +8,7 @@ import { Questions } from '../api/questions.js';
 
 import HtmlView from './HtmlView.jsx';
 import QuestionList from './QuestionList.jsx';
+import SearchBox from './SearchBox.jsx';
 import TagsInput from 'react-tagsinput'
  
 // App component - represents the whole app
@@ -15,7 +16,7 @@ export class Library extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {tags: [], andTags:false}
+    //this.state = {tags: [], andTags:false}
   }
 
   componentWillMount(){
@@ -26,11 +27,10 @@ export class Library extends Component {
     this.setState( { questionList: nextProps.questionList, loading:nextProps.loading});
   }
 
-  updateQuestionList(){
-    tags = this.state.tags
+  updateQuestionList(tags=[],andTags=false){
 
     if (tags.length){
-      if (this.state.andTags === false){
+      if (andTags === false){
         questionList = Questions.find({ tags:{$in:tags}  }, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
       }else{
         var arr = []
@@ -46,17 +46,6 @@ export class Library extends Component {
     this.setState({questionList:questionList})
   }
 
-  handleAndTag(evt){
-    this.state.andTags = evt.target.checked;//don't trigger render
-    this.updateQuestionList();//triggers render
-  }
-
-  handleTagsChange(tags){
-    this.state.tags=tags;//don't trigger render
-    this.updateQuestionList();//triggers render
-  }
-
-
   render() {
    questionList = this.state.questionList;
    if(this.state.loading || !questionList){
@@ -65,11 +54,9 @@ export class Library extends Component {
    else{
     return (
       <div className='panel panel-primary'>
-        
+       <SearchBox updateQuestionList = {this.updateQuestionList.bind(this)} /> 
        <div className="panel-heading">{this.state.questionList.length}  Questions</div>
-       <input type="checkbox" name="andTags" onChange={this.handleAndTag.bind(this)} checked={this.state.andTags} /> AND the tags: <br/> 
-        <TagsInput onChange={this.handleTagsChange.bind(this)} value={this.state.tags} />
-        <QuestionList questionList= {this.state.questionList} loading={this.state.loading} />
+       <QuestionList questionList= {this.state.questionList} loading={this.state.loading} />
       </div>
     );
 
@@ -86,7 +73,6 @@ export default  LibraryContainer =  createContainer( () => {
   const qhandle = Meteor.subscribe('questions');
   const loading = !qhandle.ready();   
   questionList = Questions.find({}, {sort: {createdAt: -1}, skip:0, limit:10}).fetch();
-//  const loading = questionList ? false:true;
   return {
     questionList: questionList,
     loading: loading,
