@@ -4,7 +4,7 @@ import { mount } from 'react-mounter';
 
 import { Questions } from '../imports/api/questions.js';
 
-import LibraryContainer from '../imports/ui/Library.jsx';
+import Library from '../imports/ui/Library.jsx';
 import QuestionView from '../imports/ui/QuestionView.jsx';
 import NewQuestionForm from '../imports/ui/NewQuestionForm.jsx';
 import QuestionEditContainer from '../imports/ui/QuestionEdit.jsx';
@@ -24,7 +24,7 @@ FlowRouter.route('/library', {
   name: 'library',
   action() {
     mount(AppContainer, {
-      main: <LibraryContainer/>,
+      main: <Library/>,
     });
   },
 });

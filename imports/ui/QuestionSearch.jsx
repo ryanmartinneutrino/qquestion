@@ -6,17 +6,20 @@ import { Questions } from '../api/questions.js';
 
 import TagsInput from 'react-tagsinput'
  
-// App component - represents the whole app
 export default class QuestionSearch extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {tags: [], andTags:false}
+    this.state = {tags: [], andTags:false, loading:true}
   }
 
   getQuestionList(){
     tags = this.state.tags
     andTags = this.state.andTags
+    const qhandle = Meteor.subscribe('questions');
+    const loading = !qhandle.ready();
+
+    this.setState({loading:loading})
  
     if (tags.length){
       if (andTags === false){

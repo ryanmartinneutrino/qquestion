@@ -7,13 +7,17 @@ import TagsInput from 'react-tagsinput'
 export default class QuestionPreview extends Component {
 
   componentDidMount () {
-    console.log("preview mount: "+this.props.question._id)
-    if(this.props.question)  MathJax.Hub.Queue(['Typeset', MathJax.Hub,"qprev_"+this.props.question._id])
+    div_id="qprev_new"
+    if(this.props.question._id) div_id="qprev_"+this.props.question._id
+    console.log("preview mount: "+div_id)
+    if(this.props.question)  MathJax.Hub.Queue(['Typeset', MathJax.Hub,div_id])
   }
 
   componentDidUpdate () {
-    console.log("preview update: "+this.props.question._id)
-    if(this.props.question) MathJax.Hub.Queue(['Typeset', MathJax.Hub,"qprev_"+this.props.question._id])
+    div_id="qprev_new"
+    if(this.props.question._id) div_id="qprev_"+this.props.question._id
+    console.log("preview update: "+div_id)
+    if(this.props.question) MathJax.Hub.Queue(['Typeset', MathJax.Hub,div_id])
   }
 
   handleDelete(evt){
@@ -43,6 +47,8 @@ export default class QuestionPreview extends Component {
 
   render() {
    question = this.props.question;// ? this.props.questions : {text:'no question in db'} ;
+   div_id="qprev_new"
+   if(question._id) div_id="qprev_"+this.props.question._id
    if(!question){
     return( <div className='container'>Loading...</div>);
    }
@@ -60,7 +66,7 @@ export default class QuestionPreview extends Component {
 
     }
     return (
-      <div id={"qprev_"+this.props.question._id} className='panel panel-default'>
+      <div id={div_id} className='panel panel-default'>
         <div className="panel-heading">
            {deleteButton} {editButton} <br /> 
            Question: {this.props.question._id} <br />

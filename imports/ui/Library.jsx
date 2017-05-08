@@ -14,11 +14,13 @@ import TagsInput from 'react-tagsinput'
 
 //TODO: Library and QuestionSearch need to deal with the question list when they first mount!!!
 //then, Library doesn't need to be a container anymore, but QuestionSearch probably does...
+//Not sure if it's possible -> how does child pass up a value that it has to calculate???
 
 export class Library extends Component {
 
   constructor(props) {
     super(props)
+    this.state = { questionList:[], loading:false}
     //this.state = {tags: [], andTags:false}
   }
 
@@ -29,27 +31,30 @@ export class Library extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState( { questionList: nextProps.questionList, loading:nextProps.loading});
   }
-  refreshQuestionList(questionList){
-    this.setState({questionList:questionList});
+  setQuestionList(questionList){
+    this.setState({questionList:questionList, loading:false});
   }
 
   render() {
    questionList = this.state.questionList;
-   if(this.state.loading || !questionList){
-    return(  <HtmlView html="Loading..." />);
-   }
-   else{
+   //if(this.state.loading || !questionList){
+   // return(  <HtmlView html="Loading..." />);
+  // }
+  // else{
     return (
       <div className='panel panel-primary'>
-       <QuestionSearch  onChange = {this.refreshQuestionList.bind(this)}/> 
-       <div className="panel-heading">{this.state.questionList.length}  Questions</div>
+       <QuestionSearch  onChange = {this.setQuestionList.bind(this)}/> 
+       <div className="panel-heading"> 
+         {this.state.questionList.length}    Questions
+       </div>
        <QuestionList questionList= {this.state.questionList} loading={this.state.loading} />
       </div>
     );
 
-   }
+   //}
   }
 };
+
 
 Library.propTypes = {
   questionList: React.PropTypes.array,
