@@ -5,6 +5,8 @@ import { FilesCollection } from 'meteor/ostrio:files';
 
 export const Questions = new Mongo.Collection('questions');
 export const Images = new Mongo.Collection("images");
+export const Tags = new Mongo.Collection("tags");
+
 
 export const ImagesFS = new FS.Collection("imagesfs", {
   stores: [new FS.Store.FileSystem("imagesfs")]
@@ -31,6 +33,8 @@ if (Meteor.isServer) {
   Meteor.publish('questions', function questionsPublication() {
     return Questions.find();
   });
+
+  Meteor.publish('tags', function () { return Tags.find();} );
 
   Meteor.publish('files.images.all', function () {
     return ImagesMF.find().cursor;
@@ -73,6 +77,18 @@ Meteor.methods({
     //  throw new Meteor.Error('not-authorized');
     //}
     id = Questions.insert(question); 
+    tags = question.tags;
+    //update the Tags collection
+    for (let tag of tags){
+      record = Tags.findOne({tag:tag});
+      if (!record){
+        record = { tag:tag, qid:[id] };
+        Tags.insert(record);
+      }else{
+        record.qid.push(id);
+        Tags.update({_id:record._id},record);
+      }
+    }
     return id;
   },
 
